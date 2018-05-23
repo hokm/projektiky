@@ -1,0 +1,71 @@
+﻿<Page
+    x:Class="Pivovar_Mobile.DevicesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pivovar_Mobile"
+    xmlns:m="using:Pivovar_Mobile.Model"
+    xmlns:conv="using:Pivovar_Mobile.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+    <Page.Resources>
+        <conv:DateFormatConverter x:Name="DateToStringFormatConverter"/>
+        <conv:CelsiusFormatConverter x:Name="CelsiusToStringFormatConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <ProgressRing Name="ProgressRing1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="50"/>
+        <GridView ItemsSource="{x:Bind Devices}" Loaded="GridView_Loaded" SelectionChanged="GridView_SelectionChanged">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="m:Device">
+                    <Grid ColumnSpacing="16" RowSpacing="8" Padding="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" MinWidth="90" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MaxWidth="220"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{x:Bind Name}" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="28" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                            <FontIcon Grid.Column="1" FontFamily="Segoe MDL2 Assets" Glyph="{x:Bind Status}" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.4"/>
+                        </Grid>
+                        <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{x:Bind ActualTemperature.Celsius, Converter={StaticResource CelsiusToStringFormatConverter}}" HorizontalAlignment="Left" FontSize="24"/>
+                            <TextBlock Grid.Row="1" 
+                                       Text="{x:Bind ActualTemperature.Date, Converter={StaticResource DateToStringFormatConverter}}" 
+                                       HorizontalAlignment="Left" 
+                                       FontSize="12" 
+                                       Opacity="0.7"/>
+                        </Grid>
+                        <StackPanel Grid.Row="1"  VerticalAlignment="Center" Spacing="15">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE9CA;" FontSize="22" Foreground="SkyBlue"/>
+                                <TextBlock Text="Min" Margin="5 0 6 0" />
+                                <TextBlock Text="{x:Bind MinTemp}"/>
+                                <TextBlock Text="°C"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE9CA;" FontSize="22" Foreground="IndianRed"/>
+                                <TextBlock Text="Max" Margin="5 0 6 0"/>
+                                <TextBlock Text="{x:Bind MaxTemp}"/>
+                                <TextBlock Text="°C"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+        <AppBarButton Name="Refresh" Style="{StaticResource AppBarButtonRevealStyle}" Label="Refresh" Icon="Refresh" Click="Refresh_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
+    </Grid>
+</Page>
+
